@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Birthday RSVP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- mobile scaling -->
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Trebuchet MS', sans-serif;
+      background: url('https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3hmaHhlMjRoc2FxN200emUzeG9iN2Ixem5yenNreXV0aDBnb3M2eSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/K4LP7NRn2h07w61bVQ/giphy.gif') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+      position: relative;
+      text-align: center;
+      color: #fff;
+    }
+
+    /* Dark overlay for readability */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 0;
+    }
+
+    .card {
+      background: rgba(98, 105, 235, 0.318);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      padding: 24px 20px;
+      width: 100%;
+      max-width: 380px;
+      z-index: 1;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      border: none;
+      margin: 12px 0;
+      text-align: center;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: column; /* stack on mobile */
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 16px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    }
+
+    .yes { background: #ff1744; color: #fff; }
+    .no { background: #ffeb3b; color: #333; }
+
+    #msg {
+      margin-top: 14px;
+      font-size: 1rem;
+      font-weight: bold;
+    }
+
+    @media (min-width: 600px) {
+      /* On tablets/laptops, buttons side by side */
+      .row { flex-direction: row; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🎉 Fiesta de Cumpleaños 🎉</h1>
+    <p>You coming Bro? 💃🌮</p>
+
+    <input id="name" type="text" placeholder="Your name here" autocomplete="name" />
+
+    <div class="row">
+      <button class="yes" id="yesBtn">Of course! 🎊</button>
+      <button class="no" id="noBtn">Sorry 😢</button>
+    </div>
+
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxP0_dhAaojOgp_QyIlFMV_VIlVLfguICkjE8jpkVEsHJxyqCPgCUsB4xocUBCkS8fbEg/exec"; // replace with your /exec URL
+    const nameEl = document.getElementById("name");
+    const msgEl = document.getElementById("msg");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+
+    function setBusy(busy) {
+      yesBtn.disabled = noBtn.disabled = busy;
+      msgEl.textContent = busy ? "Guardando tu respuesta..." : "";
+    }
+
+    async function submitResponse(answer) {
+      const name = nameEl.value.trim();
+      if (!name) {
+        msgEl.textContent = "Por favor escribe tu nombre 🙂";
+        return;
+      }
+      setBusy(true);
+
+      try {
+        const body = new URLSearchParams({ name, answer });
+        const res = await fetch(SCRIPT_URL, { method: "POST", body });
+
+        if (!res.ok) throw new Error("HTTP " + res.status);
+
+        msgEl.textContent = `¡Gracias, ${name}! Respondiste: ${answer}. 🎈`;
+
+        setTimeout(() => {
+          window.location.href = "great.html";
+        }, 1500);
+
+      } catch (err) {
+        console.error(err);
+        msgEl.textContent = "Algo salió mal. Inténtalo otra vez.";
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    yesBtn.addEventListener("click", () => submitResponse("Yes"));
+    noBtn.addEventListener("click", () => submitResponse("No"));
+  </script>
+</body>
+</html>
