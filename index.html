@@ -47,10 +47,9 @@
     }
 
     input {
-      width: 100%;
-      padding: 14px;
+      padding: 16px;
       font-size: 1.1rem;
-      border-radius: 10px;
+      border-radius: 12px;
       border: none;
       margin: 12px 0;
       text-align: center;
@@ -78,7 +77,7 @@
       box-shadow: 0 6px 12px rgba(0,0,0,0.25);
     }
 
-    .yes { background: #ff1744; color: #fff; }
+    .yes { background: #6aee8d; color: #fff; }
     .no { background: #ffeb3b; color: #333; }
 
     #msg {
@@ -95,14 +94,14 @@
 </head>
 <body>
   <div class="card">
-    <h1>🎉 Fiesta de Cumpleaños 🎉</h1>
+    <h1>🎉Fiesta de Cumpleaños🎉</h1>
     <p>You coming Bro? 💃🌮</p>
 
-    <input id="name" type="text" placeholder="Your name here" autocomplete="name" />
+    <input id="name" type="text" placeholder="Name" autocomplete="name" />
 
     <div class="row">
-      <button class="yes" id="yesBtn">Of course! 🎊</button>
-      <button class="no" id="noBtn">Sorry 😢</button>
+      <button class="yes" id="yesBtn">Duh!</button>
+      <button class="no" id="noBtn">Nah I am lame</button>
     </div>
 
     <div id="msg"></div>
@@ -117,13 +116,13 @@
 
     function setBusy(busy) {
       yesBtn.disabled = noBtn.disabled = busy;
-      msgEl.textContent = busy ? "Guardando tu respuesta..." : "";
+      msgEl.textContent = busy ? "Saving your response..." : "";
     }
 
     async function submitResponse(answer) {
       const name = nameEl.value.trim();
       if (!name) {
-        msgEl.textContent = "Por favor escribe tu nombre 🙂";
+        msgEl.textContent = "Enter your name Idiot 🙂";
         return;
       }
       setBusy(true);
@@ -136,13 +135,11 @@
 
         msgEl.textContent = `¡Gracias, ${name}! Respondiste: ${answer}. 🎈`;
 
-        setTimeout(() => {
-          window.location.href = "great.html";
-        }, 1500);
+        window.location.href = "great.html";
 
       } catch (err) {
         console.error(err);
-        msgEl.textContent = "Algo salió mal. Inténtalo otra vez.";
+        msgEl.textContent = "Oops we have an error.";
       } finally {
         setBusy(false);
       }
@@ -153,4 +150,3 @@
   </script>
 </body>
 </html>
-
